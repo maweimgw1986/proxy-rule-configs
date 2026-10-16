@@ -1,0 +1,603 @@
+# Clash Verge 远程分流模板；机场订阅仅写入客户端的订阅扩展配置。
+port: 7890
+socks-port: 7891
+mixed-port: 7890
+allow-lan: true
+bind-address: '*'
+lan-allowed-ips:
+- 127.0.0.0/8
+- ::1/128
+- 100.64.0.0/10
+mode: rule
+log-level: info
+ipv6: false
+sniffer:
+  enable: true
+  parse-pure-ip: true
+  override-destination: false
+  sniff:
+    TLS:
+      ports:
+      - 443
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+  - '*.lan'
+  - '*.local'
+  - '*.ts.net'
+  - captive.apple.com
+  nameserver:
+  - https://doh.pub/dns-query
+  - https://dns.alidns.com/dns-query
+  - 223.5.5.5
+  - 119.29.29.29
+  proxy-server-nameserver:
+  - 223.5.5.5
+  - 119.29.29.29
+proxy-groups:
+- name: 代理
+  type: select
+  proxies:
+  - 自动选择
+  - 香港节点
+  - 台湾节点
+  - 日本节点
+  - 新加坡节点
+  - 美国节点
+  - DIRECT
+- name: 自动选择
+  type: url-test
+  url: http://www.gstatic.com/generate_204
+  interval: 600
+  tolerance: 50
+  filter: ^(?!.*(网易|墨鱼|剩余|重置|到期|官网)).*$
+  include-all-providers: true
+  proxies:
+  - REJECT
+- name: 兜底分流
+  type: select
+  proxies:
+  - 代理
+  - DIRECT
+  - 香港节点
+  - 台湾节点
+  - 日本节点
+  - 新加坡节点
+  - 美国节点
+- name: 香港节点
+  type: url-test
+  url: http://www.gstatic.com/generate_204
+  interval: 600
+  filter: 🇭🇰|HK|Hong|hong|香港|深港|沪港|京港|港
+  include-all-providers: true
+  proxies:
+  - REJECT
+- name: 台湾节点
+  type: url-test
+  url: http://www.gstatic.com/generate_204
+  interval: 600
+  filter: 🇹🇼|TW|TWN|Taiwan|Taipei|taiwan|台湾|台灣|台北
+  include-all-providers: true
+  proxies:
+  - REJECT
+- name: 日本节点
+  type: url-test
+  url: http://www.gstatic.com/generate_204
+  interval: 600
+  filter: 🇯🇵|JP|Japan|japan|Tokyo|tokyo|日本|东京|大阪|日
+  include-all-providers: true
+  proxies:
+  - REJECT
+- name: 新加坡节点
+  type: url-test
+  url: http://www.gstatic.com/generate_204
+  interval: 600
+  filter: 🇸🇬|SG|Sing|sing|新加坡|狮城|沪新|京新
+  include-all-providers: true
+  proxies:
+  - REJECT
+- name: 美国节点
+  type: url-test
+  url: http://www.gstatic.com/generate_204
+  interval: 600
+  filter: 🇺🇸|US|USA|America|america|United States|美国|洛杉矶|硅谷|波特兰|美
+  include-all-providers: true
+  proxies:
+  - REJECT
+- name: AI-All
+  type: select
+  proxies:
+  - 美国节点
+  - 自动选择
+  - 日本节点
+  - 新加坡节点
+  - 台湾节点
+  - 香港节点
+  - 代理
+  - DIRECT
+- name: Google
+  type: select
+  proxies:
+  - 自动选择
+  - 日本节点
+  - 新加坡节点
+  - 美国节点
+  - 香港节点
+  - 台湾节点
+  - 代理
+  - DIRECT
+- name: YouTube
+  type: select
+  proxies:
+  - 自动选择
+  - 香港节点
+  - 新加坡节点
+  - 日本节点
+  - 美国节点
+  - 台湾节点
+  - 代理
+  - DIRECT
+- name: Telegram
+  type: select
+  proxies:
+  - 自动选择
+  - 新加坡节点
+  - 香港节点
+  - 日本节点
+  - 美国节点
+  - 代理
+  - DIRECT
+- name: Twitter
+  type: select
+  proxies:
+  - 自动选择
+  - 代理
+  - 香港节点
+  - 日本节点
+  - 美国节点
+  - DIRECT
+- name: Instagram
+  type: select
+  proxies:
+  - 自动选择
+  - 代理
+  - 香港节点
+  - 日本节点
+  - 美国节点
+  - DIRECT
+- name: Facebook
+  type: select
+  proxies:
+  - 自动选择
+  - 代理
+  - 香港节点
+  - 日本节点
+  - 美国节点
+  - DIRECT
+- name: TikTok
+  type: select
+  proxies:
+  - 美国节点
+  - 新加坡节点
+  - 日本节点
+  - 台湾节点
+  - 代理
+  - DIRECT
+- name: Netflix
+  type: select
+  proxies:
+  - 代理
+  - 新加坡节点
+  - 日本节点
+  - 台湾节点
+  - 香港节点
+  - 美国节点
+  - DIRECT
+- name: Bilibili
+  type: select
+  proxies:
+  - DIRECT
+  - 台湾节点
+  - 香港节点
+- name: GitHub
+  type: select
+  proxies:
+  - 自动选择
+  - 代理
+  - 香港节点
+  - 日本节点
+  - DIRECT
+- name: DMM
+  type: select
+  proxies:
+  - 日本节点
+  - 代理
+  - DIRECT
+- name: Javdb
+  type: select
+  proxies:
+  - 台湾节点
+  - 日本节点
+  - 美国节点
+  - 新加坡节点
+  - 自动选择
+  - 代理
+  - DIRECT
+- name: Line
+  type: select
+  proxies:
+  - 自动选择
+  - 台湾节点
+  - 日本节点
+  - 新加坡节点
+  - 香港节点
+  - 代理
+  - DIRECT
+- name: PayPal
+  type: select
+  proxies:
+  - DIRECT
+  - 代理
+  - 美国节点
+  - 香港节点
+- name: PikPak
+  type: select
+  proxies:
+  - 新加坡节点
+  - 香港节点
+  - 自动选择
+  - 代理
+  - DIRECT
+- name: Reddit
+  type: select
+  proxies:
+  - 自动选择
+  - 代理
+  - 美国节点
+  - 日本节点
+  - DIRECT
+- name: Shopify
+  type: select
+  proxies:
+  - 自动选择
+  - 代理
+  - 美国节点
+  - DIRECT
+- name: Muse
+  type: select
+  proxies:
+  - 自动选择
+  - 代理
+  - 美国节点
+  - DIRECT
+- name: 小红书
+  type: select
+  proxies:
+  - DIRECT
+  - 代理
+- name: 知乎
+  type: select
+  proxies:
+  - DIRECT
+  - 代理
+- name: 快手
+  type: select
+  proxies:
+  - DIRECT
+  - 代理
+- name: 抖音
+  type: select
+  proxies:
+  - DIRECT
+  - 代理
+- name: 微博
+  type: select
+  proxies:
+  - DIRECT
+  - 代理
+- name: 百度贴吧
+  type: select
+  proxies:
+  - DIRECT
+  - 代理
+- name: 微信
+  type: select
+  proxies:
+  - DIRECT
+  - 代理
+rule-providers:
+  rule_openai:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/OpenAI/OpenAI.yaml
+    path: ./rules/openai.yaml
+    interval: 172800
+  rule_claude:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Claude/Claude.yaml
+    path: ./rules/claude.yaml
+    interval: 172800
+  rule_gemini:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Gemini/Gemini.yaml
+    path: ./rules/gemini.yaml
+    interval: 172800
+  rule_bing:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Bing/Bing.yaml
+    path: ./rules/bing.yaml
+    interval: 172800
+  rule_copilot:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Copilot/Copilot.yaml
+    path: ./rules/copilot.yaml
+    interval: 172800
+  rule_telegram:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.yaml
+    path: ./rules/telegram.yaml
+    interval: 172800
+  rule_twitter:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml
+    path: ./rules/twitter.yaml
+    interval: 172800
+  rule_instagram:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Instagram/Instagram.yaml
+    path: ./rules/instagram.yaml
+    interval: 172800
+  rule_facebook:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Facebook/Facebook.yaml
+    path: ./rules/facebook.yaml
+    interval: 172800
+  rule_tiktok:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/TikTok/TikTok.yaml
+    path: ./rules/tiktok.yaml
+    interval: 172800
+  rule_line:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Line/Line.yaml
+    path: ./rules/line.yaml
+    interval: 172800
+  rule_reddit:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Reddit/Reddit.yaml
+    path: ./rules/reddit.yaml
+    interval: 172800
+  rule_youtube:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml
+    path: ./rules/youtube.yaml
+    interval: 172800
+  rule_youtubemusic:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTubeMusic/YouTubeMusic.yaml
+    path: ./rules/youtubemusic.yaml
+    interval: 172800
+  rule_netflix:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.yaml
+    path: ./rules/netflix.yaml
+    interval: 172800
+  rule_bilibili:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BiliBili/BiliBili.yaml
+    path: ./rules/bilibili.yaml
+    interval: 172800
+  rule_bilibili_intl:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BiliBiliIntl/BiliBiliIntl.yaml
+    path: ./rules/bilibili_intl.yaml
+    interval: 172800
+  rule_google:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Google/Google.yaml
+    path: ./rules/google.yaml
+    interval: 172800
+  rule_googledrive:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GoogleDrive/GoogleDrive.yaml
+    path: ./rules/googledrive.yaml
+    interval: 172800
+  rule_googlevoice:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GoogleVoice/GoogleVoice.yaml
+    path: ./rules/googlevoice.yaml
+    interval: 172800
+  rule_googlesearch:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GoogleSearch/GoogleSearch.yaml
+    path: ./rules/googlesearch.yaml
+    interval: 172800
+  rule_googleearth:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GoogleEarth/GoogleEarth.yaml
+    path: ./rules/googleearth.yaml
+    interval: 172800
+  rule_github:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml
+    path: ./rules/github.yaml
+    interval: 172800
+  rule_dmm:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DMM/DMM.yaml
+    path: ./rules/dmm.yaml
+    interval: 172800
+  rule_paypal:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/PayPal/PayPal.yaml
+    path: ./rules/paypal.yaml
+    interval: 172800
+  rule_pikpak:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/PikPak/PikPak.yaml
+    path: ./rules/pikpak.yaml
+    interval: 172800
+  rule_shopify:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Shopify/Shopify.yaml
+    path: ./rules/shopify.yaml
+    interval: 172800
+  rule_xiaohongshu:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/XiaoHongShu/XiaoHongShu.yaml
+    path: ./rules/xiaohongshu.yaml
+    interval: 172800
+  rule_zhihu:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Zhihu/Zhihu.yaml
+    path: ./rules/zhihu.yaml
+    interval: 172800
+  rule_kuaishou:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/KuaiShou/KuaiShou.yaml
+    path: ./rules/kuaishou.yaml
+    interval: 172800
+  rule_douyin:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DouYin/DouYin.yaml
+    path: ./rules/douyin.yaml
+    interval: 172800
+  rule_weibo:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Weibo/Weibo.yaml
+    path: ./rules/weibo.yaml
+    interval: 172800
+  rule_baidutieba:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BaiDuTieBa/BaiDuTieBa.yaml
+    path: ./rules/baidutieba.yaml
+    interval: 172800
+  rule_wechat:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/WeChat/WeChat.yaml
+    path: ./rules/wechat.yaml
+    interval: 172800
+  rule_china_domain:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/China/China_Domain.yaml
+    path: ./rules/china_domain.yaml
+    interval: 172800
+  rule_china:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/China/China.yaml
+    path: ./rules/china.yaml
+    interval: 172800
+  rule_china_ip:
+    type: http
+    behavior: ipcidr
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaIPs/ChinaIPs_IP.yaml
+    path: ./rules/china_ip.yaml
+    interval: 172800
+rules:
+- IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+- IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+- IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+- DOMAIN-SUFFIX,tailscale.com,DIRECT
+- DOMAIN-SUFFIX,tailscale.io,DIRECT
+- DOMAIN-KEYWORD,derp,DIRECT
+- DOMAIN,ad.12306.cn,DIRECT
+- DOMAIN-SUFFIX,tu.ewrewej.la,日本节点
+- DOMAIN-SUFFIX,tu.djhdhs.us,DIRECT
+- DOMAIN-SUFFIX,javdb.com,Javdb
+- DOMAIN-SUFFIX,jdbstatic.com,Javdb
+- DOMAIN-KEYWORD,javlibrary,Javdb
+- DOMAIN-SUFFIX,muse.ai,Muse
+- DOMAIN-SUFFIX,museai.com,Muse
+- DOMAIN-SUFFIX,ecto1.ai,Muse
+- DOMAIN-SUFFIX,x.ai,AI-All
+- DOMAIN-SUFFIX,grok.com,AI-All
+- DOMAIN-SUFFIX,oaistatic.com,AI-All
+- DOMAIN-SUFFIX,oaiusercontent.com,AI-All
+- DOMAIN-SUFFIX,chatgpt.com,AI-All
+- DOMAIN-SUFFIX,anthropic.com,AI-All
+- DOMAIN-SUFFIX,claude.ai,AI-All
+- DOMAIN-SUFFIX,notebooklm.google,AI-All
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI-All
+- RULE-SET,rule_openai,AI-All
+- RULE-SET,rule_claude,AI-All
+- RULE-SET,rule_gemini,AI-All
+- RULE-SET,rule_bing,AI-All
+- RULE-SET,rule_copilot,AI-All
+- RULE-SET,rule_telegram,Telegram
+- RULE-SET,rule_twitter,Twitter
+- RULE-SET,rule_instagram,Instagram
+- RULE-SET,rule_facebook,Facebook
+- RULE-SET,rule_tiktok,TikTok
+- RULE-SET,rule_line,Line
+- RULE-SET,rule_reddit,Reddit
+- RULE-SET,rule_youtube,YouTube
+- RULE-SET,rule_youtubemusic,YouTube
+- RULE-SET,rule_netflix,Netflix
+- RULE-SET,rule_bilibili,Bilibili
+- RULE-SET,rule_bilibili_intl,Bilibili
+- RULE-SET,rule_googledrive,Google
+- RULE-SET,rule_googlevoice,Google
+- RULE-SET,rule_googlesearch,Google
+- RULE-SET,rule_googleearth,Google
+- RULE-SET,rule_google,Google
+- RULE-SET,rule_github,GitHub
+- RULE-SET,rule_dmm,DMM
+- RULE-SET,rule_paypal,PayPal
+- RULE-SET,rule_pikpak,PikPak
+- RULE-SET,rule_shopify,Shopify
+- RULE-SET,rule_xiaohongshu,小红书
+- RULE-SET,rule_zhihu,知乎
+- RULE-SET,rule_kuaishou,快手
+- RULE-SET,rule_douyin,抖音
+- RULE-SET,rule_weibo,微博
+- RULE-SET,rule_baidutieba,百度贴吧
+- RULE-SET,rule_wechat,微信
+- RULE-SET,rule_china_domain,DIRECT
+- RULE-SET,rule_china,DIRECT
+- RULE-SET,rule_china_ip,DIRECT
+- GEOIP,CN,DIRECT
+- MATCH,兜底分流
+proxies:
+- name: 模板占位_勿选
+  type: reject
